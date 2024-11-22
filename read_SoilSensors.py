@@ -47,7 +47,7 @@ else:
     port_name = '/dev/ttyUSB0'
 
 # Initialize the serial device
-serial_device = SerialDevice.init_port(port_name=port_name, baudRate=9600, timeOut=2, verbose=False)
+serial_device = SerialDevice.init_port(port_name=port_name, baudRate=9600, timeOut=2, verbose=True)
 
 try:
     for i in range(4, 10):
