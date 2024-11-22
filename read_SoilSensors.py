@@ -1,7 +1,7 @@
 import time
 import platform
 import json
-from SerialDevice import SerialDevice
+from lib.SerialDevice import SerialDevice
 from readBytes import get_inst, read_value, get_dev_id
 
 with open("SoilSensorInstructions.json", "r") as file:
@@ -47,7 +47,7 @@ else:
     port_name = '/dev/ttyUSB0'
 
 # Initialize the serial device
-serial_device = SerialDevice.init_port(port_name=port_name, baudRate=9600, timeOut=2, verbose=True)
+serial_device = SerialDevice.init_port(port_name=port_name, baudRate=9600, timeOut=2, verbose=False)
 
 try:
     for i in range(4, 10):

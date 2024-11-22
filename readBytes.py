@@ -21,8 +21,6 @@ def get_inst():
     return instructions["instructions"][inst_type]["bytes"], inst_type
 
 def get_dev_id(result):
-    # remove CRC value (last two pairs of hex)
-    result = result[:-4]
     device_id = result[0:2]
     return device_id
 
@@ -30,7 +28,6 @@ def read_value(result, inst_type):
     # remove CRC value (last two pairs of hex)
     result = result[:-4]
 
-    #device_id = result[0:2]
     eff_bytes = result[4:4 + 2]
     data = result[6:6 + int(eff_bytes) * 2]
     convert_rate = instructions["instructions"][inst_type]["convert_rate"]
