@@ -1,0 +1,44 @@
+{
+    "instructions": {
+        "1": {
+            "description": "Soil temperature and humidity",
+            "bytes": "0x00 0x12 0x00 0x02",
+	    "convert_rate": 10
+        },
+        "2": {
+            "description": "Soil moisture",
+            "bytes": "0x00 0x12 0x00 0x01",
+	    "convert_rate": 10
+        },
+        "3": {
+            "description": "Soil electrical conductivity",
+            "bytes": "0x00 0x15 0x00 0x01",
+	    "convert_rate": 1
+        },
+        "4": {
+            "description": "Soil pH value",
+            "bytes": "0x00 0x06 0x00 0x01",
+	    "convert_rate": 100
+        },
+        "5": {
+            "description": "Soil NPK value",
+            "bytes": "0x00 0x1E 0x00 0x03",
+	    "convert_rate": 1
+        },
+        "6": {
+            "description": "Soil nitrogen value",
+            "bytes": "0x00 0x1e 0x00 0x01",
+	    "convert_rate": 1
+        },
+        "7": {
+            "description": "Soil phosphorus value",
+            "bytes": "0x00 0x1f 0x00 0x01",
+	    "convert_rate": 1
+        },
+        "8": {
+            "description": "Soil potassium value",
+            "bytes": "0x00 0x20 0x00 0x01",
+	    "convert_rate": 1
+        }
+    }
+}
