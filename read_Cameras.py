@@ -1,6 +1,6 @@
 import cv2
 import datetime
-from hortilite.Cameras import HIKROBOTCamera
+from lib.Cameras import HIKROBOTCamera
 
 def capture_interval(camera_ip="192.168.1.205", interval_msec=15000):
     try:
