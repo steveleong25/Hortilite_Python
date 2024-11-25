@@ -37,22 +37,30 @@ def read_value(result, inst_type):
         temp, hum = [data[i:i+4] for i in range(0, len(data), 4)]
         temp = hex_to_signed(temp) / convert_rate
         hum = hex_to_signed(hum) / convert_rate
-        return temp, hum
+        return {"Temperature" : temp, "Humidity" : hum}
     elif inst_type == '2': # soil moisture
         mst = hex_to_signed(data) / convert_rate
-        return mst
+        return {"Moisture" : mst}
     elif inst_type == '3': # conductivity
-        cdt = hex_to_signed(data) / convert_rate
-        return cdt   
+        ec = hex_to_signed(data) / convert_rate
+        return {"EC" : ec}
     elif inst_type == '4': # pH
         ph = hex_to_signed(data) / convert_rate
-        return ph
+        return {"pH" : ph}
     elif inst_type == '5': # NPK
         n, p, k = [data[i:i+4] for i in range(0, len(data), 4)]
         n = hex_to_signed(n) / convert_rate
         p = hex_to_signed(p) / convert_rate
         k = hex_to_signed(k) / convert_rate
-        return n, p, k
+        return {"Nitrogen" : n, "Phosphorus" : p, "Potassium" : k}
     elif inst_type == '6' or inst_type == '7' or inst_type == '8': # nitrogen, phosphorus, potassium
-        return hex_to_signed(data) / convert_rate
+        if inst_type == '6':
+            n = hex_to_signed(data) / convert_rate
+            return {"Nitrogen" : n}
+        elif inst_type == '7':
+            p = hex_to_signed(data) / convert_rate
+            return {"Phosphorus" : p}
+        elif inst_type == '8':
+            k = hex_to_signed(data) / convert_rate
+            return {"Potassium" : n}
         
