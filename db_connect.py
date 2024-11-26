@@ -62,4 +62,4 @@ def add_new_record(sensor_name, sensor_id, data):
     })
 
 
-read_all_from_collection("Soil", 1)
+#read_all_from_collection("Soil", 1)
