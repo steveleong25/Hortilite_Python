@@ -26,9 +26,23 @@ def read_all_from_collection(collection_name, sensor_id):
 
     for doc in docs:
         doc_data = doc.to_dict()
-        print(f'Date => {doc_data['date_time'].astimezone(pytz.timezone('Asia/Kuala_Lumpur')).strftime('%Y-%m-%d %I:%M:%S %p %Z')}')
-        print(f'Temperature => {doc_data['temperature']}')
-        print(f'Humidity => {doc_data['humidity']}')
+        print(f"Date => {doc_data['date_time'].astimezone(pytz.timezone('Asia/Kuala_Lumpur')).strftime('%Y-%m-%d %I:%M:%S %p %Z')}")
+        if 'temperature' in doc_data:
+            print(f"Temperature => {doc_data['temperature']} \u00B0C")
+        if 'humidity' in doc_data:
+            print(f"Humidity => {doc_data['humidity']}%")
+        if 'moisture' in doc_data:
+            print(f"Soil Moisture => {doc_data['moisture']}%")
+        if 'EC' in doc_data:
+            print(f"Electric Conductivity => {doc_data['EC']} us/cm")
+        if 'pH' in doc_data:
+            print(f"Soil pH => {doc_data['pH']}")
+        if 'nitrogen' in doc_data:
+            print(f"Nitrogen => {doc_data['nitrogen']} mg/kg")
+        if 'phosphorus' in doc_data:
+            print(f"Phosphorus => {doc_data['phosphorus']} mg/kg")
+        if 'potassium' in doc_data:
+            print(f"Potassium => {doc_data['potassium']} mg/kg")
 
 # Write to Firebase
 def add_new_record(sensor_name, sensor_id, data):
