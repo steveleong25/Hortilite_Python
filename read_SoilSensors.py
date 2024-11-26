@@ -3,7 +3,6 @@ import platform
 import json
 from lib.SerialDevice import SerialDevice
 from readBytes import get_inst, read_value, get_dev_id
-from db_connect import add_new_record
 
 with open("SoilSensorInstructions.json", "r") as file:
     instructions = json.load(file)
@@ -66,7 +65,6 @@ try:
             true_val = read_value(data.hex(), inst_type)
             print("Device ID:", device_id)
             print(f"Received Data: {true_val}")
-            add_new_record("Soil", device_id, true_val)
         
         time.sleep(1)  # Delay to avoid flooding the device
 

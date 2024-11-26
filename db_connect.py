@@ -3,6 +3,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 from datetime import datetime, timedelta
 
+# Credentials JSON key file
 cred = credentials.Certificate('db/hortilite-test-firebase-adminsdk-w9s0u-6fdaaf3ee5.json')
 firebase_admin.initialize_app(cred)
 
@@ -26,40 +27,34 @@ def read_all_from_collection(collection_name, sensor_id):
     for doc in docs:
         doc_data = doc.to_dict()
         print(f'Date => {doc_data['date_time'].astimezone(pytz.timezone('Asia/Kuala_Lumpur')).strftime('%Y-%m-%d %I:%M:%S %p %Z')}')
-        if 'temperature' in doc_data:
-            print(f'Temperature => {doc_data['temperature']} \u00B0C')
-        if 'humidity' in doc_data:
-            print(f'Humidity => {doc_data['humidity']}%')
-        if 'moisture' in doc_data:
-            print(f'Soil Moisture => {doc_data['moisture']}%')
-        if 'EC' in doc_data:
-            print(f'Electric Conductivity => {doc_data['EC']} us/cm')
-        if 'pH' in doc_data:
-            print(f'Soil pH => {doc_data['pH']}')
-        if 'nitrogen' in doc_data:
-            print(f'Nitrogen => {doc_data['nitrogen']} mg/kg')
-        if 'phosphorus' in doc_data:
-            print(f'Phosphorus => {doc_data['phosphorus']} mg/kg')
-        if 'potassium' in doc_data:
-            print(f'Potassium => {doc_data['potassium']} mg/kg')
+        print(f'Temperature => {doc_data['temperature']}')
+        print(f'Humidity => {doc_data['humidity']}')
 
 # Write to Firebase
 def add_new_record(sensor_name, sensor_id, data):
-    doc_ref = db.collection(sensor_name).document(sensor_id)
+    data_ref = db.collection(sensor_name).document(sensor_id).collection("Data")
 
-    # Ensure the document exists
-    if not doc_ref.get().exists:
-        doc_ref.set({"active": True})  
-
-    data_ref = doc_ref.collection("Data")
-    
     docs = data_ref.stream()
-    latest_record_number = max([int(doc.id) for doc in docs] or [0]) + 1
 
-    data_ref.document(str(latest_record_number)).set({
-        **data,
-        "date_time": firestore.SERVER_TIMESTAMP,
+    latest_record_number = 0
+    for doc in docs:
+        try:
+            record_number = int(doc.id)
+            if record_number > latest_record_number:
+                latest_record_number = record_number
+        except ValueError:
+            pass
+
+    new_record_number = latest_record_number + 1
+
+    new_doc_ref = data_ref.document(str(new_record_number))
+    new_doc_ref.set({
+        'date_time': firestore.SERVER_TIMESTAMP,
+        'humidity': 80.8,
+        'temperature': 31.3,
     })
 
+    print(f"New record added with ID: {new_record_number}")
 
-#read_all_from_collection("Soil", 1)
+
+read_all_from_collection()
