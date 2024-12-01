@@ -41,36 +41,44 @@ def modbus_crc_16(data, endian="big"):
     elif endian == "big":
         return crc & 0xff, crc >> 8
 
-# Windows testing, else Raspberry Pi
-if platform.system() == "Windows":
-    port_name = 'COM7'
-else:
-    port_name = '/dev/ttyUSB0'
+def read_soil_by_addr(start_addr=1, end_addr=12):
+    # Windows testing, else Raspberry Pi
+    if platform.system() == "Windows":
+        port_name = 'COM7'
+    else:
+        port_name = '/dev/ttyUSB0'
 
-# Initialize the serial device
-serial_device = SerialDevice.init_port(port_name=port_name, baudRate=9600, timeOut=2, verbose=False)
+    # Initialize the serial device
+    serial_device = SerialDevice.init_port(port_name=port_name, baudRate=9600, timeOut=2, verbose=False)
 
-try:
-    for i in range(4, 10):
-        a = [i, 0x03] + [int(value, 16) for value in inst.split()]
-        trig_hex = bytearray(a)
+    collected_data = {}
 
-        ##calculate checksum and append data to be sent
-        crc = modbus_crc_16(trig_hex)
-        a = trig_hex + bytearray(crc)
-        serial_device.write(a)
+    try:
+        for i in range(start_addr, end_addr+1):
+            a = [i, 0x03]
+            for key in map(str, range(1, 6)):
+                if key in instructions['instructions']:
+                    byte_inst = [int(value, 16) for value in instructions['instructions']['bytes'].split()]
+                    a = a + byte_inst
+                trig_hex = bytearray(a)
 
-        data = serial_device.read(size=13)  # Adjust size based on expected response
-        if data:
-            device_id = get_dev_id(data.hex())
-            true_val = read_value(data.hex(), inst_type)
-            print("Device ID:", device_id)
-            print(f"Received Data: {true_val}")
-            add_new_record("Soil", device_id, true_val)
-        
-        time.sleep(1)  # Delay to avoid flooding the device
+                ##calculate checksum and append data to be sent
+                crc = modbus_crc_16(trig_hex)
+                a = trig_hex + bytearray(crc)
+                serial_device.write(a)
 
-except KeyboardInterrupt:
-    # Ctrl+C Exit
-    print("Terminating the connection.")
-    serial_device.disconnect()
+                data = serial_device.read(size=13)  # Adjust size based on expected response
+                if data:
+                    device_id = get_dev_id(data.hex())
+                    true_val = read_value(data.hex(), inst_type)
+                    collected_data.update(true_val)
+                    print("Device ID:", device_id)
+                    print(f"Received Data: {collected_data}")
+                    #add_new_record("Soil", device_id, true_val)
+                
+                time.sleep(1)  # Delay to avoid flooding the device
+
+    except KeyboardInterrupt:
+        # Ctrl+C Exit
+        print("Terminating the connection.")
+        serial_device.disconnect()
