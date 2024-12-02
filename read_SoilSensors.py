@@ -1,6 +1,7 @@
 import time
 import platform
 import json
+import datetime
 from lib.SerialDevice import SerialDevice
 from readBytes import get_inst, read_value, get_dev_id
 from db_connect import add_new_record
@@ -72,10 +73,17 @@ def read_soil_by_addr(start_addr=1, end_addr=12):
                     device_id = get_dev_id(data.hex())
                     true_val = read_value(data.hex(), inst_type)
                     collected_data.update(true_val)
-                    print("Device ID:", device_id)
-                    print(f"Received Data: {collected_data}")
+                    #print("Device ID:", device_id)
+                    #print(f"Received Data: {collected_data}")
                     #add_new_record("Soil", device_id, true_val)
                 
+                with open('test_sensor_autolog.txt', 'a') as file:
+                    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    
+                    file.write(f"Timestamp: {current_time}\n")
+                    file.write(f"Sensor Data: {collected_data}\n")
+                    file.write("-" * 40 + "\n")
+                    
                 time.sleep(1)  # Delay to avoid flooding the device
 
     except KeyboardInterrupt:
