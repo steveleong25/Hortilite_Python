@@ -1,13 +1,12 @@
 import pytz
-import firebase_admin
-from firebase_admin import credentials, firestore
+from google.cloud import firestore
+from google.oauth2 import service_account
 from datetime import datetime, timedelta
 
 # Credentials JSON key file
-cred = credentials.Certificate('db/hortilite-test-firebase-adminsdk-w9s0u-6fdaaf3ee5.json')
-firebase_admin.initialize_app(cred)
+cred = service_account.Credentials.from_service_account_file('db/hortilite-test-firebase-adminsdk-w9s0u-6fdaaf3ee5.json')
 
-db = firestore.client()
+db = firestore.Client(credentials=cred)
 
 ## Sensor Type > Sensor ID > Data ==FIXED== > num_of_records
 
@@ -46,7 +45,12 @@ def read_all_from_collection(collection_name, sensor_id):
 
 # Write to Firebase
 def add_new_record(sensor_name, sensor_id, data):
-    data_ref = db.collection(sensor_name).document(sensor_id).collection("Data")
+    active_ref = db.collection(sensor_name).document(sensor_name.lower() + sensor_id)
+    data_ref = active_ref.collection("Data")
+
+    active_ref.set({
+        'active': True,
+        })
 
     docs = data_ref.stream()
 
@@ -64,10 +68,9 @@ def add_new_record(sensor_name, sensor_id, data):
     new_doc_ref = data_ref.document(str(new_record_number))
     new_doc_ref.set({
         'date_time': firestore.SERVER_TIMESTAMP,
-        'humidity': 80.8,
-        'temperature': 31.3,
+        **data,
     })
 
-    print(f"New record added with ID: {new_record_number}")
+    #print(f"New record added with ID: {new_record_number}")
 
 #read_all_from_collection()

@@ -4,4 +4,4 @@ from read_DHT22 import read_DHT22_by_addr
 
 read_soil_by_addr(5, 8)
 read_DHT22_by_addr((5, 6, 16, 26))
-capture_interval()
+#capture_interval()
