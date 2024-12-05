@@ -41,5 +41,5 @@ def capture_interval(camera_ip="192.168.1.205", interval_msec=15000):
         camera.close()
         print("Camera disconnected.")
 
-#if __name__ == "__main__":
-#    capture_interval()
+if __name__ == "__main__":
+    capture_interval()

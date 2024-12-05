@@ -36,9 +36,10 @@ def capture_and_upload(camera_ip="192.168.1.205"):
         camera.stream()
         print("Camera streaming started.")
 
+        camera_name = camera_ip.replace('.', '_')
         image_data = camera.capture_one()
         if image_data is not None:
-            file_name = f"captured_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.jpg"
+            file_name = f"{camera_name}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.jpg"
             public_url = upload_image_to_firebase(bucket, image_data, file_name)
             print(f"Image uploaded successfully. Public URL: {public_url}")
         else:
