@@ -52,8 +52,6 @@ def read_soil_by_addr(start_addr=1, end_addr=12):
     # Initialize the serial device
     serial_device = SerialDevice.init_port(port_name=port_name, baudRate=9600, timeOut=2, verbose=False)
 
-    
-
     try:
         for i in range(start_addr, end_addr+1):
             collected_data = {}
@@ -75,16 +73,14 @@ def read_soil_by_addr(start_addr=1, end_addr=12):
                     device_id = get_dev_id(data.hex())
                     true_val = read_value(data.hex(), key)
                     collected_data.update(true_val)
-                    print("Device ID:", device_id)
-                    print(f"Received Data: {collected_data}")
-                                                    
+                                                                        
                 time.sleep(1)  # Delay to avoid flooding the device
             
+            #print("Device ID:", device_id)
+            #print(f"Received Data: {collected_data}")
             add_new_record("Soil", device_id, collected_data)
             
     except KeyboardInterrupt:
         # Ctrl+C Exit
         print("Terminating the connection.")
         serial_device.disconnect()
-        
-read_soil_by_addr(5, 8)

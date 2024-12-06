@@ -45,7 +45,7 @@ def read_all_from_collection(collection_name, sensor_id):
 
 # Write to Firebase
 def add_new_record(sensor_name, sensor_id, data):
-    active_ref = db.collection(sensor_name).document(sensor_name.lower() + sensor_id)
+    active_ref = db.collection(sensor_name).document(sensor_name.lower() + '_' + str(sensor_id))
     data_ref = active_ref.collection("Data")
 
     active_ref.set({

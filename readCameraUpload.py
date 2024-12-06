@@ -23,6 +23,7 @@ def upload_image_to_firebase(bucket, image, file_name):
     return blob.public_url
 
 def capture_and_upload(camera_ip="192.168.1.205"):
+    camera = None
     try:
         bucket = initialize_firebase()
         camera = HIKROBOTCamera(ip_addr=camera_ip, load_settings=True)
@@ -49,13 +50,14 @@ def capture_and_upload(camera_ip="192.168.1.205"):
         print(f"An error occurred: {e}")
 
     finally:
-        if camera.connected():
+        if camera and camera.connected():
             camera.stop()
             print("Camera streaming stopped.")
-        camera.close()
-        print("Camera disconnected.")
+        if camera:
+            camera.close()
+            print("Camera disconnected.")
 
-if __name__ == "__main__":
-    capture_and_upload()
+#if __name__ == "__main__":
+#    capture_and_upload()
 
 
