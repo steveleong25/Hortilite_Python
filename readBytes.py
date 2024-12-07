@@ -1,6 +1,6 @@
 import json
 
-with open("SoilSensorInstructions.json", "r") as file:
+with open("/home/pi/Desktop/Hortilite_Python/SoilSensorInstructions.json", "r") as file:
     instructions = json.load(file)
 
 def hex_to_signed(value):
