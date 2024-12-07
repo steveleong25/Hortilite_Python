@@ -70,7 +70,3 @@ def add_new_record(sensor_name, sensor_id, data):
         'date_time': firestore.SERVER_TIMESTAMP,
         **data,
     })
-
-    #print(f"New record added with ID: {new_record_number}")
-
-#read_all_from_collection()

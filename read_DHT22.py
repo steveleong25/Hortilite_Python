@@ -19,8 +19,6 @@ def read_DHT22_by_addr(addr_range):
                {"Temperature" : round(t3, 2), "Humidity" : round(h3, 2)},
                {"Temperature" : round(t4, 2), "Humidity" : round(h4, 2)}
                ]
-    
-    #print('''{0:0.1f}, {1:0.1f}, {2:0.1f},{3:0.1f}, {4:0.1f}, {5:0.1f}, {6:0.1f}, {7:0.1f}'''.format(h1, t1, h2, t2, h3, t3, h4, t4), end="\r", flush=True)
 
     if ip_addr == "192.168.1.102":
         device_id = (5, 6, 7, 8)
@@ -29,5 +27,3 @@ def read_DHT22_by_addr(addr_range):
     
     for dev_id, result in zip(device_id, results):
         add_new_record("DHT22", dev_id, result)
-
-#read_DHT22_by_addr((5, 6, 16, 26))

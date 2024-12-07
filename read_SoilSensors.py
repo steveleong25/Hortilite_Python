@@ -68,7 +68,7 @@ def read_soil_by_addr(start_addr=1, end_addr=12):
                 a = trig_hex + bytearray(crc)
                 serial_device.write(a)
 
-                data = serial_device.read(size=13)  # Adjust size based on expected response
+                data = serial_device.read(size=13)
                 if data:
                     device_id = get_dev_id(data.hex())
                     true_val = read_value(data.hex(), key)
