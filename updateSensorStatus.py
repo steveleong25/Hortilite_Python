@@ -3,6 +3,7 @@ from google.cloud import firestore
 from google.oauth2 import service_account
 from datetime import datetime, timedelta
 from lib.SerialDevice import SerialDevice
+from lib.Cameras import HIKROBOTCamera
 
 # Credentials JSON key file
 cred = service_account.Credentials.from_service_account_file('db/hortilite-test-firebase-adminsdk-w9s0u-6fdaaf3ee5.json')
@@ -12,7 +13,9 @@ db = firestore.Client(credentials=cred)
 
 # Addresses
 camera_ip_range = ("192.168.1.205", "192.168.1.206", "192.168.1.207", "192.168.1.208")
-soil_id = dht_id = (5, 6, 7, 8)
+soil_id = ("05", "06", "07", "08")
+dht_id = (5, 6, 16, 26)
+dht_device_id = (5, 6, 7, 8)
 
 # Soil Sensors #
 def checkSoilStatus(sensor_ids):
@@ -29,13 +32,15 @@ def checkSoilStatus(sensor_ids):
 
 # DHT22 Sensors #
 def checkDHTStatus(addr_range):
-    for dev_id in addr_range:
+    for dev_id, gpio_id in zip(dht_device_id, addr_range):
         active_ref = db.collection("DHT22").document("dht22_" + str(dev_id))
-        h, t = dht.read_retry(dht.DHT22, dev_id)
-        if h is None and t is None:
-            active_ref.update({'active': False})
-        else:
-            active_ref.update({'active': True})
+        for i in range(1, 4):
+            h, t = dht.read_retry(dht.DHT22, gpio_id)
+            if h is None and t is None:
+                active_ref.update({'active': False})
+            else:
+                active_ref.update({'active': True})
+                break
 
 # Camera Sensors #
 def checkCamStatus(ip_addr_range):
@@ -56,3 +61,4 @@ def checkCamStatus(ip_addr_range):
 checkSoilStatus(soil_id)
 checkDHTStatus(dht_id)
 checkCamStatus(camera_ip_range)
+print("done")
