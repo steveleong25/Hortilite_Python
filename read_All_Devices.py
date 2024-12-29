@@ -7,7 +7,7 @@ print(f"\n ===== {datetime.datetime.now().strftime('%Y%m%d_%H%M%S')} ===== \n")
 
 camera_ip_range = ("192.168.1.205", "192.168.1.206", "192.168.1.207", "192.168.1.208")
 
-read_soil_by_addr(5, 8)
+read_soil_by_addr(5, 9)
 read_DHT22_by_addr((5, 6, 16, 26))
 
 for cam_ip in camera_ip_range:

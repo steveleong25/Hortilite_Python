@@ -70,3 +70,14 @@ def add_new_record(sensor_name, sensor_id, data):
         'date_time': firestore.SERVER_TIMESTAMP,
         **data,
     })
+
+def get_data_retrieval_time():
+    docs = db.collection('Global').document('1').get()
+    collection_hours = docs.to_dict().get('collectionHours')
+    
+    if collection_hours is not None:
+        return collection_hours
+    else:
+        print("Field 'collectionHours' does not exist in the database.")
+        
+    
